@@ -1,11 +1,13 @@
 import { useState } from "react";
+import axios from 'axios'
 import "./App.css";
 
 function App() {
   const [records, setRecords] = useState(1);
 
   const generateRecords = (records) => {
-    console.log(records);
+    axios.post("http://localhost:3001/api/insertUsers", 
+    { recordy: records})
     setRecords(1);
   };
 
