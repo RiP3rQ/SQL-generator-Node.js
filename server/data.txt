@@ -1,0 +1,10 @@
+id_klienta_dodanego: 0 ,pesel: 81614718402, nr_telefonu: 440176735 
+id_apteki: 0, miasto: Mishawaka, kod_pocztowy: 77-134, ulica: 11239 Madelyn Bypass, nazwa: Murphy, Breitenberg and McCullough, ilosc_pracownikow: 75
+id_klienta_dodanego: 1 ,pesel: 25794945452, nr_telefonu: 749935095 
+id_apteki: 1, miasto: Buffalo, kod_pocztowy: 89-504, ulica: 33951 Wilhelm Meadows, nazwa: Douglas - Wisoky, ilosc_pracownikow: 99
+id_klienta_dodanego: 2 ,pesel: 19455538091, nr_telefonu: 550414325 
+id_apteki: 2, miasto: Antioch, kod_pocztowy: 46-271, ulica: 013 Erik Highway, nazwa: Rodriguez Group, ilosc_pracownikow: 94
+id_klienta_dodanego: 3 ,pesel: 98726830909, nr_telefonu: 978555149 
+id_apteki: 3, miasto: Lincoln, kod_pocztowy: 58-205, ulica: 2159 Wellington Inlet, nazwa: Padberg - Gorczany, ilosc_pracownikow: 89
+id_klienta_dodanego: 4 ,pesel: 67021901930, nr_telefonu: 163421914 
+id_apteki: 4, miasto: Edinburg, kod_pocztowy: 37-153, ulica: 36608 Aric Greens, nazwa: Raynor - White, ilosc_pracownikow: 16
