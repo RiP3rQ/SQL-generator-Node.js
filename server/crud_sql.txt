@@ -1,0 +1,378 @@
+-- *******************************************************************************
+-- *                                        				 *                                  
+-- *       PROJEKTOWANIE BAZ DANYCH - LABORATORIUM 		 * 	 GRUPA: 	3	               
+-- *                                       					 *                                  
+-- *******************************************************************************
+-- * 																		     
+-- *   Nazwisko i imię:  Pompa Rafał                                                    
+-- * 																		     
+-- *******************************************************************************
+-- * 																		     
+-- *   Nr indeksu:   101187                                                            
+-- * 																		     
+-- *******************************************************************************
+-- *******************************************************************************
+-- * 																		     
+-- *   Temat projektu:   Apteka                                                            
+-- * 																		     
+-- *******************************************************************************
+
+
+
+
+-- -------------------------------------------------------------------------------
+-- TWORZENIE STRUKTURY BAZY DANYCH                                            
+-- -------------------------------------------------------------------------------
+
+
+CREATE TABLE apteka (
+    id_apteki         INTEGER NOT NULL,
+    miasto            VARCHAR2(50) NOT NULL,
+    kod_pocztowy      VARCHAR2(6) NOT NULL,
+    ulica             VARCHAR2(50) NOT NULL,
+    nazwa             VARCHAR2(50) NOT NULL,
+    ilosc_pracownikow INTEGER NOT NULL
+);
+
+ALTER TABLE apteka ADD CONSTRAINT apteka_pk PRIMARY KEY ( id_apteki );
+
+CREATE TABLE hurtownia (
+    id_hurtowni    INTEGER NOT NULL,
+    wlasciciel     VARCHAR2(100) NOT NULL,
+    nazwa_hurtowni VARCHAR2(50) NOT NULL,
+    nr_telefonu    VARCHAR2(9) NOT NULL,
+    adres          VARCHAR2(100) NOT NULL
+);
+
+ALTER TABLE hurtownia ADD CONSTRAINT hurtownia_pk PRIMARY KEY ( id_hurtowni );
+
+CREATE TABLE klienci (
+    id_klienta  INTEGER NOT NULL,
+    pesel       VARCHAR2(21),
+    nr_telefonu VARCHAR2(9)
+);
+
+ALTER TABLE klienci ADD CONSTRAINT klienci_pk PRIMARY KEY ( id_klienta );
+
+CREATE TABLE pracownicy_apteki (
+    id_pracownika      INTEGER NOT NULL,
+    nazwisko           VARCHAR2(50) NOT NULL,
+    nr_telefonu        VARCHAR2(9),
+    data_zatrudnienia  DATE NOT NULL,
+    pensja             NUMBER(15, 2) NOT NULL,
+    adres_zamieszkania VARCHAR2(100) NOT NULL,
+    apteka_id_apteki   INTEGER NOT NULL
+);
+
+ALTER TABLE pracownicy_apteki ADD CONSTRAINT pracownicy_apteki_pk PRIMARY KEY ( id_pracownika );
+
+CREATE TABLE producent (
+    id_producenta INTEGER NOT NULL,
+    nazwa         VARCHAR2(50) NOT NULL,
+    adres         VARCHAR2(100) NOT NULL,
+    nr_telefonu   VARCHAR2(9) NOT NULL,
+    email         VARCHAR2(100) NOT NULL
+);
+
+ALTER TABLE producent ADD CONSTRAINT producent_pk PRIMARY KEY ( id_producenta );
+
+CREATE TABLE produkt (
+    id_lekarstwa             INTEGER NOT NULL,
+    nazwa                    VARCHAR2(100) NOT NULL,
+    cena                     NUMBER(15, 2) NOT NULL,
+    ilosc_na_magazynie       INTEGER NOT NULL,
+    skladniki                VARCHAR2(200) NOT NULL,
+    opis                     VARCHAR2(250) NOT NULL,
+    producent_id_producenta  INTEGER NOT NULL,
+    ilosc_sztuk_w_opakowaniu VARCHAR2(50) NOT NULL
+);
+
+ALTER TABLE produkt ADD CONSTRAINT produkt_pk PRIMARY KEY ( id_lekarstwa );
+
+CREATE TABLE przepisane_lekarstwa (
+    id_lekarstwa       INTEGER NOT NULL,
+    nazwa_lekarstwa    VARCHAR2(50) NOT NULL,
+    ilosc              INTEGER NOT NULL,
+    recepta_id_recepty INTEGER NOT NULL
+);
+
+ALTER TABLE przepisane_lekarstwa ADD CONSTRAINT przepisane_lekarstwa_pk PRIMARY KEY ( id_lekarstwa );
+
+CREATE TABLE recepta (
+    id_recepty               INTEGER NOT NULL,
+    data_waznosci_recepty    DATE NOT NULL,
+    klienci_id_klienta       INTEGER NOT NULL,
+    transakcja_id_transakcji INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX recepta__idx ON
+    recepta (
+        transakcja_id_transakcji
+    ASC );
+
+ALTER TABLE recepta ADD CONSTRAINT recepta_pk PRIMARY KEY ( id_recepty );
+
+CREATE TABLE relation_7 (
+    transakcja_id_transakcji INTEGER NOT NULL,
+    produkt_id_lekarstwa     INTEGER NOT NULL
+);
+
+ALTER TABLE relation_7 ADD CONSTRAINT relation_7_pk PRIMARY KEY ( transakcja_id_transakcji,
+                                                                  produkt_id_lekarstwa );
+
+CREATE TABLE relation_8 (
+    produkt_id_lekarstwa  INTEGER NOT NULL,
+    hurtownia_id_hurtowni INTEGER NOT NULL
+);
+
+ALTER TABLE relation_8 ADD CONSTRAINT relation_8_pk PRIMARY KEY ( produkt_id_lekarstwa,
+                                                                  hurtownia_id_hurtowni );
+
+CREATE TABLE transakcja (
+    id_transakcji      INTEGER NOT NULL,
+    kwota              NUMBER(15, 2) NOT NULL,
+    data_transakcji    DATE NOT NULL,
+    apteka_id_apteki   INTEGER NOT NULL,
+    recepta_id_recepty INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX transakcja__idx ON
+    transakcja (
+        recepta_id_recepty
+    ASC );
+
+ALTER TABLE transakcja ADD CONSTRAINT transakcja_pk PRIMARY KEY ( id_transakcji );
+
+ALTER TABLE pracownicy_apteki
+    ADD CONSTRAINT pracownicy_apteki_apteka_fk FOREIGN KEY ( apteka_id_apteki )
+        REFERENCES apteka ( id_apteki );
+
+ALTER TABLE produkt
+    ADD CONSTRAINT produkt_producent_fk FOREIGN KEY ( producent_id_producenta )
+        REFERENCES producent ( id_producenta );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE przepisane_lekarstwa
+    ADD CONSTRAINT przepisane_lekarstwa_recepta_fk FOREIGN KEY ( recepta_id_recepty )
+        REFERENCES recepta ( id_recepty );
+
+ALTER TABLE recepta
+    ADD CONSTRAINT recepta_klienci_fk FOREIGN KEY ( klienci_id_klienta )
+        REFERENCES klienci ( id_klienta );
+
+ALTER TABLE recepta
+    ADD CONSTRAINT recepta_transakcja_fk FOREIGN KEY ( transakcja_id_transakcji )
+        REFERENCES transakcja ( id_transakcji );
+
+ALTER TABLE relation_7
+    ADD CONSTRAINT relation_7_produkt_fk FOREIGN KEY ( produkt_id_lekarstwa )
+        REFERENCES produkt ( id_lekarstwa );
+
+ALTER TABLE relation_7
+    ADD CONSTRAINT relation_7_transakcja_fk FOREIGN KEY ( transakcja_id_transakcji )
+        REFERENCES transakcja ( id_transakcji );
+
+ALTER TABLE relation_8
+    ADD CONSTRAINT relation_8_hurtownia_fk FOREIGN KEY ( hurtownia_id_hurtowni )
+        REFERENCES hurtownia ( id_hurtowni );
+
+ALTER TABLE relation_8
+    ADD CONSTRAINT relation_8_produkt_fk FOREIGN KEY ( produkt_id_lekarstwa )
+        REFERENCES produkt ( id_lekarstwa );
+
+ALTER TABLE transakcja
+    ADD CONSTRAINT transakcja_apteka_fk FOREIGN KEY ( apteka_id_apteki )
+        REFERENCES apteka ( id_apteki );
+
+ALTER TABLE transakcja
+    ADD CONSTRAINT transakcja_recepta_fk FOREIGN KEY ( recepta_id_recepty )
+        REFERENCES recepta ( id_recepty );
+
+----------
+-- ALTERY
+----------
+
+alter table przepisane_lekarstwa modify constraint PRZEPISANE_LEKARSTWA_RECEPTA_FK disable;
+alter table recepta modify constraint RECEPTA_TRANSAKCJA_FK disable;
+alter table recepta modify constraint RECEPTA_KLIENCI_FK disable;
+alter table transakcja modify constraint TRANSAKCJA_APTEKA_FK disable;
+alter table relation_7 modify constraint RELATION_7_PRODUKT_FK disable;
+
+-- -------------------------------------------------------------------------------
+-- POLECENIA:   5 X INSERT  DO WSZYSTKICH TABEL                                               
+-- -------------------------------------------------------------------------------
+
+
+----------
+-- Apteka
+----------
+
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values
+('1', 'Opole', '12-345', 'Kosciuszki 31/2', 'Apteka pod lwem', '12');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values
+('2', 'Opole', '13-742', 'Wroclawska 11', 'Apteka pod lwem', '8');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values
+('3', 'Raciborz', '69-420', 'Opolska 12', 'Apteka pod bykiem', '15');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values
+('4', 'Rybnik', '22-879', 'Szczesci 7', 'Apteka pod stokrotka', '9');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values
+('5', 'Rybnik', '17-249', 'Szybka 11', 'Apteka pod lwem', '21');
+
+----------
+-- Hurtownia
+----------
+
+insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values
+('1', 'Stefan Nowak', 'Hurtownia Slonko', '123456789', 'Opole 12-345 Raciborska 23');
+insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values
+('2', 'Robert Pasut', 'Hurtownia Zetta', '637890487', 'Opole 12-221 Norweska 132');
+insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values
+('3', 'Sergiusz gorski', 'Hurtownia Ebba', '527453231', 'Raciborz 44-221 Wiejska 74');
+insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values
+('4', 'Rafal Pompa', 'Hurtownia Essa', '872543910', 'Rybnik 88-284 Mroczna 5');
+insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values
+('5', 'Zbigniew Kappa', 'Hurtownia Kappa', '123423189', 'Rybnik 32-671 Dluga 22');
+
+----------
+-- Klienci
+----------
+
+insert into klienci (id_klienta, pesel, nr_telefonu) values
+('1', '12312312312', '232354678');
+insert into klienci (id_klienta, pesel, nr_telefonu) values
+('2', '', '');
+insert into klienci (id_klienta, pesel, nr_telefonu) values
+('3', '23126697897', '123453967');
+insert into klienci (id_klienta, pesel, nr_telefonu) values
+('4', '', '');
+insert into klienci (id_klienta, pesel, nr_telefonu) values
+('5', '85753427891', '123123123');
+
+----------
+-- Pracownicy apteki
+----------
+
+insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values
+('1', 'Stefanowski', '123423189', '21-JAN-2021', '4232.99', 'Opole Szkolna 17', '2');
+insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values
+('2', 'Wojcik', '437896590', '03-FEB-2015', '5932.99', 'Opole Dluga 123/21', '2');
+insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values
+('3', 'Henrykowski', '756458678', '11-JAN-2007', '9379.99', 'Raciborz Krotka 57', '3');
+insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values
+('4', 'Adamczyk', '645323123', '22-APR-2001', '3432.99', 'Rybnik Chopina 7/2', '5');
+insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values
+('5', 'Beer', '897879823', '02-APR-2015', '12545.21', 'Rybnik Meksykanska 32/11', '5');
+
+----------
+-- Producent
+----------
+
+insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values
+('1', 'Zdrovita', 'Opole Oleska 72', '212121212', 'dwadawawddaw@wp.pl');
+insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values
+('2', 'Medapol', 'Opole Raszczyka 23', '756434980', 'kykgk@wp.pl');
+insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values
+('3', 'Activia', 'Rybnik Nowa 17', '855634678', 'liuliue@wp.pl');
+insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values
+('4', 'Herbapol', 'Raciborz Dluga 89', '551623678', 'vbcvbbc@wp.pl');
+insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values
+('5', 'Ebana', 'Raciborz Stefanzcyka 5', '321323173', 'agagaagag@wp.pl');
+
+----------
+-- Produkt
+----------
+
+insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values
+('1', 'Paracetamol', '19.99', '1', '77', 'woda,proszek,skladniki_1', 'awbhnigawbuagnjoawgbiawgb bawgbiawgb biawgbi', '24szt.' );
+insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values
+('2', 'Pylargina', '23.99', '1', '49', 'woda,proszek,skladniki_2', 'htfhfthfthfthfthfthfthftfthfthfthfthfthfthfthfthgb biawgbi', '24szt.' );
+insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values
+('3', 'Allegra', '7.99', '2', '23', 'woda,proszek,skladniki_3', 'Lorem Ipsum is simply dummy the printing and typesetting industry. Lorem Ipsum has been the industry', '24szt.');
+insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values
+('4', 'Ibuprom', '13.79', '4', '96', 'woda,proszek,skladniki_4', 'Lorem Ipsum is simply4444444 dummy the printing and typesetting industry. Lorem Ipsum has been the industry', '24szt.');
+insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values
+('5', 'Gripex', '23.49', '2', '19', 'woda,proszek,skladniki_5', 'Lorem Ipsum is simply55555 dummy the printing and typesetting industry. Lorem Ipsum has been the industry', '24szt.');
+
+
+----------
+-- relation_8
+----------
+
+insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values
+('1', '1');
+insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values
+('2', '2');
+insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values
+('3', '3');
+insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values
+('4', '5');
+insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values
+('5', '5');
+
+
+----------
+-- Przepisane lekarstwa
+----------
+
+
+insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES 
+('1', 'Paracetamol', '1', '1');
+insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES 
+('2', 'Paracetamol', '1', '2');
+insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES 
+('3', 'Paracetamol', '3', '3');
+insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES 
+('4', 'Paracetamol', '4', '4');
+insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES 
+('5', 'Paracetamol', '1', '5');
+
+
+----------
+-- Recepta
+----------
+
+
+
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values
+('1', '04-APR-2005', '1', '1');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values
+('2', '04-APR-2005', '2', '2');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values
+('3', '04-APR-2005', '3', '3');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values
+('4', '04-APR-2005', '4', '4');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values
+('5', '04-APR-2005', '5', '5');
+
+----------
+-- Transakcja
+----------
+
+
+
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values
+('1', '67.98', '04-APR-2004', '2', '1');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values
+('2', '23.98', '22-APR-2012', '1', '2');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values
+('3', '29.98', '22-APR-2012', '5', '3');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values
+('4', '44.68', '22-APR-2012', '3', '4');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values
+('5', '53.49', '22-APR-2012', '4', '5');
+
+----------
+-- relation_7
+----------
+
+
+insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values
+('1', '1');
+insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values
+('2', '2');
+insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values
+('3', '3');
+insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values
+('4', '5');
+insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values
+('5', '5');
