@@ -49,12 +49,17 @@ app.post('/api/insertUsers', async function (req, res) {
         let result_max_id_producenta = await con.execute("select max(id_producenta) from producent");
         const max_id_producenta = result_max_id_producenta.rows[0];
 
+        // max id lekarstwa dla tabeli produkt
+        let result_max_id_produktu = await con.execute("select max(id_lekarstwa) from produkt");
+        const max_id_produktu = result_max_id_produktu.rows[0];
+
         // id wyników do wstawienia
         const max_id_klienta_final = max_id_pracownika[0] + 1;
         const max_id_hurtowni_final = max_id_hurtowni[0] + 1;
         const max_id_apteki_final = max_id_apteki[0] + 1;
         const max_id_pracownika_final = max_id_pracownika[0] + 1;
         const max_id_producenta_final = max_id_producenta[0] + 1;
+        const max_id_produktu_final = max_id_produktu[0] + 1;
 
         // logowanie wartości
         // console.log(max_id_pracownika_final );
@@ -92,7 +97,14 @@ app.post('/api/insertUsers', async function (req, res) {
           nr_telefonu_producenta: faker.random.numeric(9),
           email_producenta: faker.internet.email(),
           // produkt
-          
+          id_lekarstwa: max_id_produktu_final,
+          nazwa_lekarstwa: faker.random.words(2),
+          cena_lekarstwa: faker.datatype.number({'min': 1,'max': 99}) + "." + faker.datatype.number({'min': 10,'max': 99}),
+          producent_id_producenta: faker.datatype.number({'min': 1,'max': max_id_producenta_final}),
+          ilosc_na_magazynie: faker.datatype.number({'min': 1,'max': 99}),
+          skladniki: faker.random.words(1) + ', ' + faker.random.words(1) + ', ' + faker.random.words(1) + ', ' + faker.random.words(1) + ', ',
+          opis: faker.random.words(9), 
+          ilosc_sztuk_w_opakowaniu: faker.datatype.number({'min': 1,'max': 99}) + "szt.",
         };
         const result = await con.execute(
           `BEGIN
@@ -111,6 +123,9 @@ app.post('/api/insertUsers', async function (req, res) {
 
             insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) 
             values (:id_producenta, :nazwa_producenta, :adres_producenta, :nr_telefonu_producenta, :email_producenta);
+
+            insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) 
+            values (:id_lekarstwa, :nazwa_lekarstwa, :cena_lekarstwa, :producent_id_producenta, :ilosc_na_magazynie, :skladniki, :opis, :ilosc_sztuk_w_opakowaniu );
           END;`,
           values,
           {autoCommit: true}
@@ -123,6 +138,7 @@ app.post('/api/insertUsers', async function (req, res) {
         result_max_id_apteki = null;
         result_max_id_apracownika = null;
         result_max_id_producenta = null;
+        result_max_id_produktu = null;
       } catch (err) {
         console.log(err);
       }
