@@ -189,7 +189,7 @@ ALTER TABLE transakcja
         REFERENCES recepta ( id_recepty );
 
 ----------
--- ALTERY
+-- ALTERY + dropy
 ----------
 
 alter table przepisane_lekarstwa modify constraint PRZEPISANE_LEKARSTWA_RECEPTA_FK disable;
@@ -197,6 +197,8 @@ alter table recepta modify constraint RECEPTA_TRANSAKCJA_FK disable;
 alter table recepta modify constraint RECEPTA_KLIENCI_FK disable;
 alter table transakcja modify constraint TRANSAKCJA_APTEKA_FK disable;
 alter table relation_7 modify constraint RELATION_7_PRODUKT_FK disable;
+drop index recepta__idx;
+drop index transakcja__idx;
 
 -- -------------------------------------------------------------------------------
 -- POLECENIA:   5 X INSERT  DO WSZYSTKICH TABEL                                               
