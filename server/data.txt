@@ -1,7 +1,15 @@
 
-        BEGIN
-          insert into klienci (id_klienta, pesel, nr_telefonu) 
-          values (17, "46597484961", "920607670");
+          insert into klienci (id_klienta, pesel, nr_telefonu) values ('17', '25578525606', '182492387');
+          insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('17', 'Temple', '38-485', '3385 Katharina Branch', 'Feeney - Ondricka', '24');
+          insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('17', 'Temple', '38-485', '3385 Katharina Branch', 'Feeney - Ondricka', '24');
+          insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values ('18', 'Orlando Windler', 'Terry - Dietrich', '843609373', 'Millcreek 39187 66812 Genevieve Harbor');
+          insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values ('17', 'Breitenberg', '550325173', '2-Jul-2021', '2934.20' , 'Pearland 567 Steuber Hill', '14');
+          insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values ('17', 'Gusikowski, Beatty and Lubowitz', 'Freeport 83732-8075 3959 Sabryna Fork', '753322034', 'Hubert27@yahoo.com');
+          insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values ('17', 'impedit Automotive', '87.83', '1', '24', 'which, pink, Buckinghamshire, feed, ', 'payment checkbook Account Gasoline Beahan Avon Cotton Soft zealous', '50szt.' );
+          insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values ('17', '10');
+          insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES ('17', 'Northwest Green', '6', '16');
+          insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('17', '159.93', '4-Aug-2015', '7', '5');
+          insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('17', '12-May-2024', '16', '17');
+          insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values ('17', '17');
 
-          
-        END;
+        
