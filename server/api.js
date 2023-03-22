@@ -144,42 +144,13 @@ app.post('/api/insertUsers', async function (req, res) {
         const query = `
         BEGIN
           insert into klienci (id_klienta, pesel, nr_telefonu) 
-          values (:id_klienta , :pesel, :nr_telefonu);
+          values ('${values.id_klienta}' , '${values.pesel}', '${values.nr_telefonu}');
 
-          insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) 
-          values (:id_apteki, :miasto, :kod_pocztowy, :ulica, :nazwa, :ilosc_pracownikow);
-
-          insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) 
-          values (:id_hurtowni, :wlasciciel_hurtowni, :nazwa_hurtowni, :nr_telefonu_hurtowni, :adres_hurtowni);
-        
-          insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) 
-          values (:id_pracownika, :nazwisko_pracownika, :nr_telefonu_pracownika, :data_zatrudnienia_pracownika,
-          :pensja_pracownika , :adres_zamieszkania_pracownika, :id_apteki_zatrudniajacej);
-
-          insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) 
-          values (:id_producenta, :nazwa_producenta, :adres_producenta, :nr_telefonu_producenta, :email_producenta);
-
-          insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) 
-          values (:id_lekarstwa, :nazwa_lekarstwa, :cena_lekarstwa, :producent_id_producenta, :ilosc_na_magazynie, :skladniki, :opis, :ilosc_sztuk_w_opakowaniu );
-        
-          insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) 
-          values (:id_lekarstwa, :relation_8_hurtownia_id_hurtowni);
-
-          insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) 
-          VALUES (:przepisane_lekarstwa_id_lekarstwa, :przepisane_lekarstwa_nazwa_lekarstwa, :przepisane_lekarstwa_ilosc, :recepta_id_recepty);
           
-          insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) 
-          values (:id_transakcji, :kwota, :data_transakcji, :apteka_id_apteki, :transakcja_recepta_id_recepty);
-          
-          insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) 
-          values (:id_recepty, :data_waznosci_recepty, :klienci_id_klienta, :transakcja_id_transakcji);
-
-          insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) 
-          values (:transakcja_id_transakcji, :id_lekarstwa);
         END;`
       ;
 
-        const result = await con.execute(query,values,{autoCommit: true});
+        const result = await con.execute(query,{autoCommit: true});
         console.log(`[${i+1}]Row inserted`);
 
         // zerowanie pogranych wartosci
@@ -211,16 +182,39 @@ app.post('/api/insertUsers', async function (req, res) {
 
 
 
-// zamiana znaków
-// const myString = 'Hello, my name is :name and I am :age years old.';
-// const myOptions = { name: 'John', age: 25 };
 
-// const replacedString = myString.replace(/:[a-zA-Z0-9_]+/g, (match) => {
-//   const variableName = match.substring(1);
-//   return myOptions[variableName] || match;
-// });
+// insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) 
+//           values (${values.id_apteki}, ${values.miasto}, ${values.kod_pocztowy}, ${values.ulica}, ${values.nazwa}, ${values.ilosc_pracownikow});
 
-// console.log(replacedString);
+//           insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) 
+//           values (${values.id_hurtowni}, ${values.wlasciciel_hurtowni}, ${values.nazwa_hurtowni}, ${values.nr_telefonu_hurtowni}, ${values.adres_hurtowni});
+        
+//           insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) 
+//           values (${values.id_pracownika}, ${values.nazwisko_pracownika}, ${values.nr_telefonu_pracownika}, ${values.data_zatrudnienia_pracownika},
+//             ${values.pensja_pracownika} , ${values.adres_zamieszkania_pracownika}, ${values.id_apteki_zatrudniajacej});
+
+//           insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) 
+//           values (${values.id_producenta}, ${values.nazwa_producenta}, ${values.adres_producenta}, ${values.nr_telefonu_producenta}, ${values.email_producenta});
+
+//           insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) 
+//           values (${values.id_lekarstwa}, ${values.nazwa_lekarstwa}, ${values.cena_lekarstwa}, ${values.producent_id_producenta}, ${values.ilosc_na_magazynie}, 
+//             ${values.skladniki}, ${values.opis}, ${values.ilosc_sztuk_w_opakowaniu} );
+        
+//           insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) 
+//           values (${values.id_lekarstwa}, ${values.relation_8_hurtownia_id_hurtowni});
+
+//           insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) 
+//           VALUES (${values.przepisane_lekarstwa_id_lekarstwa}, ${values.przepisane_lekarstwa_nazwa_lekarstwa}, ${values.przepisane_lekarstwa_ilosc}, ${values.recepta_id_recepty});
+          
+//           insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) 
+//           values (${values.id_transakcji}, ${values.kwota}, ${values.data_transakcji}, ${values.apteka_id_apteki}, ${values.transakcja_recepta_id_recepty});
+          
+//           insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) 
+//           values (${values.id_recepty}, ${values.data_waznosci_recepty}, ${values.klienci_id_klienta}, ${values.transakcja_id_transakcji});
+
+//           insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) 
+//           values (${values.transakcja_id_transakcji}, ${values.id_lekarstwa});
+
 
 
 
