@@ -91,7 +91,7 @@ app.post('/api/insertUsers', async function (req, res) {
           id_apteki: max_id_hurtowni_final,
           miasto: faker.address.cityName(),
           kod_pocztowy: `${faker.random.numeric(2)}-${faker.random.numeric(3)}`,
-          ulica: faker.address.streetAddress(),
+          ulica: faker.address.streetAddress().replace(/'/, ''),
           nazwa: faker.company.name().replace(/'/, ''),
           ilosc_pracownikow: faker.random.numeric(2),
         }
@@ -195,21 +195,45 @@ app.post('/api/insertUsers', async function (req, res) {
         await con.execute(query_relation_7, relation_7);
         console.log(`[${i+1}]Row inserted`);
 
+
+
         // zapis do pliku
         const queries = [
-          query_klienci.replace(/:[a-zA-Z0-9_]/g, klienci),
-          query_apteka.replace(/:[a-zA-Z0-9_]/g, apteka) ,
-          query_Hurtownia.replace(/:[a-zA-Z0-9_]+,/g, hurtownia) ,
-          query_pracownicy_apteki.replace(/:[a-zA-Z0-9_]/g, pracownicy) ,
-          query_producent.replace(/:[a-zA-Z0-9_]/g, producent) ,
-          query_produkt.replace(/:[a-zA-Z0-9_]/g, produkt) ,
-          query_relation_8.replace(/:[a-zA-Z0-9_]/g, relation_8) ,
-          query_przepisane_lekarstwa.replace(/:[a-zA-Z0-9_]/g, przepisane_lekarstwa) ,
-          query_transakcja.replace(/:[a-zA-Z0-9_]/g, transakcja),
-          query_recepta.replace(/:[a-zA-Z0-9_]/g, recepta) ,
-          query_relation_7.replace(/:[a-zA-Z0-9_]/g, relation_7),
+          query_klienci.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${klienci[match.slice(1)]}'`;
+          }),
+          query_apteka.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${apteka[match.slice(1)]}'`;
+          }),
+          query_Hurtownia.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${hurtownia[match.slice(1)]}'`;
+          }),
+          query_pracownicy_apteki.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${pracownicy[match.slice(1)]}'`;
+          }),
+          query_producent.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${producent[match.slice(1)]}'`;
+          }),
+          query_produkt.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${produkt[match.slice(1)]}'`;
+          }),
+          query_relation_8.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${relation_8[match.slice(1)]}'`;
+          }),
+          query_przepisane_lekarstwa.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${przepisane_lekarstwa[match.slice(1)]}'`;
+          }),
+          query_transakcja.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${transakcja[match.slice(1)]}'`;
+          }),
+          query_recepta.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${recepta[match.slice(1)]}'`;
+          }),
+          query_relation_7.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${relation_7[match.slice(1)]}'`;
+          }),
         ]
-        fs.appendFile(filename, queries.join('\n'), (err) => {
+        fs.appendFile(filename, queries.join(';\n'), (err) => {
           if (err) throw err;
           console.log('Data appended to file!');
         });
@@ -230,7 +254,7 @@ app.post('/api/insertUsers', async function (req, res) {
       } catch (err) {
         console.log(err);
       } finally {
-        con.commit();
+        // con.commit();
         
         if (con) {
           await con.close();
