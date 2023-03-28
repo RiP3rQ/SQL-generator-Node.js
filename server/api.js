@@ -66,7 +66,7 @@ app.post('/api/insertUsers', async function (req, res) {
         const max_id_transakcji = result_max_id_transakcji.rows[0];
 
         // id wyników do wstawienia
-        const max_id_klienta_final = max_id_pracownika[0] + 1;
+        const max_id_klienta_final = max_id_klienta[0] + 1;
         const max_id_hurtowni_final = max_id_hurtowni[0] + 1;
         const max_id_apteki_final = max_id_apteki[0] + 1;
         const max_id_pracownika_final = max_id_pracownika[0] + 1;
@@ -89,12 +89,12 @@ app.post('/api/insertUsers', async function (req, res) {
           miasto: faker.address.cityName(),
           kod_pocztowy: `${faker.random.numeric(2)}-${faker.random.numeric(3)}`,
           ulica: faker.address.streetAddress(),
-          nazwa: faker.company.name(),
+          nazwa: faker.company.name().replace(/'/, ''),
           ilosc_pracownikow: faker.random.numeric(2),
           // hurtownia
           id_hurtowni: max_id_apteki_final,
-          wlasciciel_hurtowni: faker.name.fullName(),
-          nazwa_hurtowni: faker.company.name(),
+          wlasciciel_hurtowni: faker.name.fullName().replace(/'/, ''),
+          nazwa_hurtowni: faker.company.name().replace(/'/, ''),
           nr_telefonu_hurtowni: faker.random.numeric(9),
           adres_hurtowni: faker.address.cityName() + " " + faker.address.zipCode() + " " + faker.address.streetAddress(),
           // pracownicy
@@ -107,13 +107,13 @@ app.post('/api/insertUsers', async function (req, res) {
           id_apteki_zatrudniajacej: faker.datatype.number({'min': 1,'max': max_id_hurtowni_final}),
           // producent
           id_producenta: max_id_producenta_final,
-          nazwa_producenta: faker.company.name(),
-          adres_producenta: faker.address.cityName() + " " + faker.address.zipCode() + " " + faker.address.streetAddress(),
+          nazwa_producenta: faker.company.name().replace(/'/, ''),
+          adres_producenta: faker.address.cityName() + " " + faker.address.zipCode() + " " + faker.address.streetAddress().replace(/'/, ''),
           nr_telefonu_producenta: faker.random.numeric(9),
           email_producenta: faker.internet.email(),
           // produkt
           id_lekarstwa: max_id_produktu_final,
-          nazwa_lekarstwa: faker.random.words(2),
+          nazwa_lekarstwa: faker.random.words(2).replace(/'/, ''),
           cena_lekarstwa: faker.datatype.number({'min': 1,'max': 99}) + "." + faker.datatype.number({'min': 10,'max': 99}),
           producent_id_producenta: faker.datatype.number({'min': 1,'max': max_id_producenta_final}),
           ilosc_na_magazynie: faker.datatype.number({'min': 1,'max': 99}),
@@ -142,25 +142,24 @@ app.post('/api/insertUsers', async function (req, res) {
 
 
         const query = `
-          insert into klienci (id_klienta, pesel, nr_telefonu) values ('${values.id_klienta}', '${values.pesel}', '${values.nr_telefonu}');
-          insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('${values.id_apteki}', '${values.miasto}', '${values.kod_pocztowy}', '${values.ulica}', '${values.nazwa}', '${values.ilosc_pracownikow}');
-          insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values ('${values.id_hurtowni}', '${values.wlasciciel_hurtowni}', '${values.nazwa_hurtowni}', '${values.nr_telefonu_hurtowni}', '${values.adres_hurtowni}');
-          insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values ('${values.id_pracownika}', '${values.nazwisko_pracownika}', '${values.nr_telefonu_pracownika}', '${values.data_zatrudnienia_pracownika}', '${values.pensja_pracownika}' , '${values.adres_zamieszkania_pracownika}', '${values.id_apteki_zatrudniajacej}');
-          insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values ('${values.id_producenta}', '${values.nazwa_producenta}', '${values.adres_producenta}', '${values.nr_telefonu_producenta}', '${values.email_producenta}');
-          insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values ('${values.id_lekarstwa}', '${values.nazwa_lekarstwa}', '${values.cena_lekarstwa}', '${values.producent_id_producenta}', '${values.ilosc_na_magazynie}', '${values.skladniki}', '${values.opis}', '${values.ilosc_sztuk_w_opakowaniu}' );
-          insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values ('${values.id_lekarstwa}', '${values.relation_8_hurtownia_id_hurtowni}');
-          insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES ('${values.przepisane_lekarstwa_id_lekarstwa}', '${values.przepisane_lekarstwa_nazwa_lekarstwa}', '${values.przepisane_lekarstwa_ilosc}', '${values.recepta_id_recepty}');
-          insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('${values.id_transakcji}', '${values.kwota}', '${values.data_transakcji}', '${values.apteka_id_apteki}', '${values.transakcja_recepta_id_recepty}');
-          insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('${values.id_recepty}', '${values.data_waznosci_recepty}', '${values.klienci_id_klienta}', '${values.transakcja_id_transakcji}');
-          insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values ('${values.transakcja_id_transakcji}', '${values.id_lekarstwa}');
+  insert into klienci (id_klienta, pesel, nr_telefonu) values ('${values.id_klienta}', '${values.pesel}', '${values.nr_telefonu}');
+  insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('${values.id_apteki}', '${values.miasto}', '${values.kod_pocztowy}', '${values.ulica}', '${values.nazwa}', '${values.ilosc_pracownikow}');
+  insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values ('${values.id_hurtowni}', '${values.wlasciciel_hurtowni}', '${values.nazwa_hurtowni}', '${values.nr_telefonu_hurtowni}', '${values.adres_hurtowni}');
+  insert into pracownicy_apteki (id_pracownika, nazwisko, nr_telefonu, data_zatrudnienia, pensja, adres_zamieszkania, apteka_id_apteki) values ('${values.id_pracownika}', '${values.nazwisko_pracownika}', '${values.nr_telefonu_pracownika}', '${values.data_zatrudnienia_pracownika}', '${values.pensja_pracownika}' , '${values.adres_zamieszkania_pracownika}', '${values.id_apteki_zatrudniajacej}');
+  insert into producent (id_producenta, nazwa, adres, nr_telefonu, email) values ('${values.id_producenta}', '${values.nazwa_producenta}', '${values.adres_producenta}', '${values.nr_telefonu_producenta}', '${values.email_producenta}');
+  insert into produkt (id_lekarstwa, nazwa, cena, producent_id_producenta, ilosc_na_magazynie, skladniki, opis, ilosc_sztuk_w_opakowaniu) values ('${values.id_lekarstwa}', '${values.nazwa_lekarstwa}', '${values.cena_lekarstwa}', '${values.producent_id_producenta}', '${values.ilosc_na_magazynie}', '${values.skladniki}', '${values.opis}', '${values.ilosc_sztuk_w_opakowaniu}' );
+  insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values ('${values.id_lekarstwa}', '${values.relation_8_hurtownia_id_hurtowni}');
+  insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES ('${values.przepisane_lekarstwa_id_lekarstwa}', '${values.przepisane_lekarstwa_nazwa_lekarstwa}', '${values.przepisane_lekarstwa_ilosc}', '${values.recepta_id_recepty}');
+  insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('${values.id_transakcji}', '${values.kwota}', '${values.data_transakcji}', '${values.apteka_id_apteki}', '${values.transakcja_recepta_id_recepty}');
+  insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('${values.id_recepty}', '${values.data_waznosci_recepty}', '${values.klienci_id_klienta}', '${values.transakcja_id_transakcji}');
+  insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values ('${values.transakcja_id_transakcji}', '${values.id_lekarstwa}');
+`;
 
-        `
-      ;
+        console.log(`"${query};"`);
+      const result = await con.execute(`"${query};"`);
+      console.log(`[${i+1}]Row inserted`);
 
-        // const result = await con.execute(query);
-        // console.log(`[${i+1}]Row inserted`);
-
-        // zapis do pliku
+      // zapis do pliku
         fs.appendFile(filename, query, (err) => {
            if (err) throw err;
            console.log('Data appended to file!');
@@ -182,14 +181,14 @@ app.post('/api/insertUsers', async function (req, res) {
         console.log(err);
       } finally {
         con.commit();
-
+        
         if (con) {
           await con.close();
         }
       }
   
 
-  // commitowanie dokonanych insertów
+ 
   
 });
 
