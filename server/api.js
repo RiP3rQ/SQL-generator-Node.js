@@ -65,6 +65,17 @@ app.post('/api/insertUsers', async function (req, res) {
         let result_max_id_transakcji = await con.execute("select max(id_transakcji) from transakcja");
         const max_id_transakcji = result_max_id_transakcji.rows[0];
 
+        // ostatnia data transakcji
+        let result_max_data_transakcji = await con.execute("select max(data_transakcji) from transakcja");
+        const max_data = result_max_data_transakcji.rows[0];
+
+        // dokładna max data
+        const max_rok = max_data[0].getFullYear();
+        const max_miesiac = max_data[0].getMonth() + 1;
+        const max_dzien = max_data[0].getDate() + 1;
+
+        console.log(max_rok + " " + max_miesiac + " " + max_dzien);
+
         // id wyników do wstawienia
         const max_id_klienta_final = max_id_klienta[0] + 1;
         const max_id_hurtowni_final = max_id_hurtowni[0] + 1;
@@ -195,8 +206,6 @@ app.post('/api/insertUsers', async function (req, res) {
         await con.execute(query_relation_7, relation_7);
         console.log(`[${i+1}]Row inserted`);
 
-
-
         // zapis do pliku
         const queries = [
           query_klienci.replace(/:[a-zA-Z0-9_]+/g, (match) => {
@@ -249,12 +258,12 @@ app.post('/api/insertUsers', async function (req, res) {
         result_max_id_przepisanego_lekarstwa = null;
         result_max_id_recepty = null;
         result_max_id_transakcji = null;
-
+        result_max_data_transakcji = null;
         }
       } catch (err) {
         console.log(err);
       } finally {
-        // con.commit();
+        con.commit();
         
         if (con) {
           await con.close();
