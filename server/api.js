@@ -269,14 +269,15 @@ app.post('/api/insertUsers', async function (req, res) {
           await con.close();
         }
       }
-  
-
- 
-  
 });
 
 
 
+// pojedyńcze inserty jako osbne routy w expressie
+
+// odpowiednie wstawianie daty transakcji do bazy
+
+// zabezpieczenia jeżeli nie ma danych w bazie
 
 
 
