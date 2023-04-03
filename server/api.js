@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const fs = require("fs");
 const { faker } = require("@faker-js/faker");
 const moment = require("moment");
+const WebSocket = require("ws");
+
 const { insertKlienci } = require("./controllers/klienci");
 const { insertApteka } = require("./controllers/apteka");
 const { insertHurtownia } = require("./controllers/hurtownia");
@@ -24,6 +26,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on("connection", function connection(ws) {
+  console.log("WebSocket connected");
+});
 
 app.listen(3001, () => {
   console.log("listening on port 3001");
@@ -379,14 +387,25 @@ app.post("/api/insertUsers", async function (req, res) {
       result_max_id_transakcji = null;
       result_max_data_transakcji = null;
 
-      // send data to frontend
-      res.write((i + 1).toString());
+      // Send progress data to the WebSocket server
+      const progress = Math.round(((i + 1) / recordy) * 100);
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(
+            JSON.stringify({
+              type: "progress",
+              data: {
+                progress,
+              },
+            })
+          );
+        }
+      });
     }
   } catch (err) {
     console.log(err);
   } finally {
     con.commit();
-    res.end();
     if (con) {
       await con.close();
     }

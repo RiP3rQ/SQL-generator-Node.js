@@ -1,63 +1,94 @@
-import { useState } from "react";
-import axios from 'axios'
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./App.css";
 
 function App() {
   const [records, setRecords] = useState(1);
-  const [selectedOption, setSelectedOption] = useState('wszystkie');
+  const [selectedOption, setSelectedOption] = useState("wszystkie");
+  const [progress, setProgress] = useState(0);
 
   const generateRecords = (records) => {
-    if(selectedOption === "wszystkie") {
-    axios.post("http://localhost:3001/api/insertUsers", 
-    { recordy: records})
-    } else if(selectedOption === "klienci") {
-      axios.post("http://localhost:3001/api/insertKlienci",
-      { recordy: records})
-    } else if(selectedOption === "apteka") {
-      axios.post("http://localhost:3001/api/insertApteka",
-      { recordy: records})
-    } else if(selectedOption === "hurtownia") {
-      axios.post("http://localhost:3001/api/insertHurtownia",
-      { recordy: records})
-    } else if(selectedOption === "pracownicy_apteki") {
-      axios.post("http://localhost:3001/api/insertPracownicyApteki",
-      { recordy: records})
-    } else if(selectedOption === "producent") {
-      axios.post("http://localhost:3001/api/insertProducent",
-      { recordy: records})
-    } else if(selectedOption === "produkt") {
-      axios.post("http://localhost:3001/api/insertProdukt",
-      { recordy: records})
-    } else if(selectedOption === "relation_8") {
-      axios.post("http://localhost:3001/api/insertRelation8",
-      { recordy: records})
-    } else if(selectedOption === "przepisane_lekarstwa") {
-      axios.post("http://localhost:3001/api/insertPrzepisaneLekarstwa",
-      { recordy: records})
-    } else if(selectedOption === "transakcja") {
-      axios.post("http://localhost:3001/api/insertTransakcja",
-      { recordy: records})
-    } else if(selectedOption === "recepta") {
-      axios.post("http://localhost:3001/api/insertRecepta",
-      { recordy: records})
-    } else if(selectedOption === "relation_7") {
-      axios.post("http://localhost:3001/api/insertRelation7",
-      { recordy: records})
-    } 
+    if (selectedOption === "wszystkie") {
+      axios.post("http://localhost:3001/api/insertUsers", { recordy: records });
+    } else if (selectedOption === "klienci") {
+      axios.post("http://localhost:3001/api/insertKlienci", {
+        recordy: records,
+      });
+    } else if (selectedOption === "apteka") {
+      axios.post("http://localhost:3001/api/insertApteka", {
+        recordy: records,
+      });
+    } else if (selectedOption === "hurtownia") {
+      axios.post("http://localhost:3001/api/insertHurtownia", {
+        recordy: records,
+      });
+    } else if (selectedOption === "pracownicy_apteki") {
+      axios.post("http://localhost:3001/api/insertPracownicyApteki", {
+        recordy: records,
+      });
+    } else if (selectedOption === "producent") {
+      axios.post("http://localhost:3001/api/insertProducent", {
+        recordy: records,
+      });
+    } else if (selectedOption === "produkt") {
+      axios.post("http://localhost:3001/api/insertProdukt", {
+        recordy: records,
+      });
+    } else if (selectedOption === "relation_8") {
+      axios.post("http://localhost:3001/api/insertRelation8", {
+        recordy: records,
+      });
+    } else if (selectedOption === "przepisane_lekarstwa") {
+      axios.post("http://localhost:3001/api/insertPrzepisaneLekarstwa", {
+        recordy: records,
+      });
+    } else if (selectedOption === "transakcja") {
+      axios.post("http://localhost:3001/api/insertTransakcja", {
+        recordy: records,
+      });
+    } else if (selectedOption === "recepta") {
+      axios.post("http://localhost:3001/api/insertRecepta", {
+        recordy: records,
+      });
+    } else if (selectedOption === "relation_7") {
+      axios.post("http://localhost:3001/api/insertRelation7", {
+        recordy: records,
+      });
+    }
     setRecords(1);
   };
 
-  const handleOptionChange = event => {
+  const handleOptionChange = (event) => {
     setSelectedOption(event.target.value); // Update selected option state on change
   };
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8080");
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "progress") {
+        setProgress(data.data.progress);
+      }
+    };
+  }, []);
+
+  console.log(progress);
 
   return (
     <div className="App">
       <div>
         <h1>SQL "Apteka" Generator</h1>
       </div>
-      <label htmlFor="select-list" id="select-label">Wstawianie do tabeli:</label>
-      <select id="select-list" value={selectedOption} onChange={handleOptionChange}>
+      <label htmlFor="select-list" id="select-label">
+        Wstawianie do tabeli:
+      </label>
+      <select
+        id="select-list"
+        value={selectedOption}
+        onChange={handleOptionChange}
+        style={{ margin: "10px", textAlign: "center" }}
+      >
         <option value="wszystkie">Wszystkie</option>
         <option value="klienci">Klienci</option>
         <option value="apteka">Apteka</option>
