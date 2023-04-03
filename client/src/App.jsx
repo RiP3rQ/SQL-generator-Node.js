@@ -4,11 +4,21 @@ import "./App.css";
 
 function App() {
   const [records, setRecords] = useState(1);
+  const [selectedOption, setSelectedOption] = useState('wszystkie');
 
   const generateRecords = (records) => {
+    if(selectedOption === "wszystkie") {
     axios.post("http://localhost:3001/api/insertUsers", 
     { recordy: records})
+    } else if(selectedOption === "klienci") {
+      axios.post("http://localhost:3001/api/insertKlienci",
+      { recordy: records})
+    }
     setRecords(1);
+  };
+
+  const handleOptionChange = event => {
+    setSelectedOption(event.target.value); // Update selected option state on change
   };
 
   return (
@@ -16,6 +26,11 @@ function App() {
       <div>
         <h1>SQL "Apteka" Generator</h1>
       </div>
+      <label htmlFor="select-list" id="select-label">Wstawianie do tabeli:</label>
+      <select id="select-list" value={selectedOption} onChange={handleOptionChange}>
+        <option value="wszystkie">Wszystkie</option>
+        <option value="klienci">Klienci</option>
+      </select>
       <div className="card">
         <label>Liczba wygenerowanych rekordów:</label>
         <input

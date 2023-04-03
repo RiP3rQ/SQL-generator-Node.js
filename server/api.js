@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const { faker } = require('@faker-js/faker');
-const { autoCommit } = require("oracledb");
+const moment = require('moment');
 
 const app = express();
 
@@ -16,6 +16,7 @@ app.listen(3001, () => {
   console.log('listening on port 3001');
  });
 
+// insertowanie do wszystkich tabel
 app.post('/api/insertUsers', async function (req, res) {
   let con;
   const recordy = req.body.recordy;
@@ -69,12 +70,27 @@ app.post('/api/insertUsers', async function (req, res) {
         let result_max_data_transakcji = await con.execute("select max(data_transakcji) from transakcja");
         const max_data = result_max_data_transakcji.rows[0];
 
-        // dokładna max data
+        // dokładna max data z bazy
         const max_rok = max_data[0].getFullYear();
         const max_miesiac = max_data[0].getMonth() + 1;
-        const max_dzien = max_data[0].getDate() + 1;
+        const max_dzien = max_data[0].getDate();
 
-        console.log(max_rok + " " + max_miesiac + " " + max_dzien);
+        // dzisiejsza data
+        const today = new Date();
+        const today_year = today.getFullYear();
+        const today_month = today.getMonth() + 1; // Adding 1 because getMonth() returns zero-based month index
+        const today_day = today.getDate();
+
+
+        // moment.js start and end date for random date
+        const startDate = moment(`${max_rok}-${max_miesiac}-${max_dzien}`, 'YYYY-MM-DD');
+        const endDate = moment(`${today_year}-${today_month}-${today_day}`, 'YYYY-MM-DD');
+
+        // random date
+        const randomDate = faker.date.between(startDate.toDate(), endDate.toDate());
+
+        // format the date with month as abbreviation
+        const formatedDate = moment(randomDate).format('DD-MMM-YYYY');
 
         // id wyników do wstawienia
         const max_id_klienta_final = max_id_klienta[0] + 1;
@@ -162,7 +178,7 @@ app.post('/api/insertUsers', async function (req, res) {
           // transakcja
           id_transakcji: max_id_transakcji_final,
           kwota: faker.random.numeric(3) + "." + faker.random.numeric(2),
-          data_transakcji: faker.datatype.number({'min': 1,'max': 12}) + "-" + faker.date.month({ abbr: true }) + "-" + faker.datatype.number({'min': 2007,'max': 2022}),
+          data_transakcji: formatedDate,
           apteka_id_apteki: faker.datatype.number({'min': 1,'max': max_id_apteki_final}),
           transakcja_recepta_id_recepty: faker.datatype.number({'min': 1,'max': max_id_recepty}), // do zmiany,
         }
@@ -259,12 +275,15 @@ app.post('/api/insertUsers', async function (req, res) {
         result_max_id_recepty = null;
         result_max_id_transakcji = null;
         result_max_data_transakcji = null;
+
+        // send data to frontend
+        res.write((i+1).toString());
         }
       } catch (err) {
         console.log(err);
       } finally {
         con.commit();
-        
+        res.end();
         if (con) {
           await con.close();
         }
@@ -275,13 +294,74 @@ app.post('/api/insertUsers', async function (req, res) {
 
 // pojedyńcze inserty jako osbne routy w expressie
 
-// odpowiednie wstawianie daty transakcji do bazy
-
 // zabezpieczenia jeżeli nie ma danych w bazie
 
+// wysyłanie danych do frontendu
 
 
 
+
+// insertowanie do tabeli klienci
+app.post('/api/insertKlienci', async function (req, res) {
+  let con;
+  const recordy = req.body.recordy;
+  const filename = 'data.txt';
+
+  con = await oracleDb.getConnection({
+    user: "s101187",
+    password: "s101187",
+    connectString: "217.173.198.135:1521/tpdb",
+  });
+
+        try {
+          for (let i = 0; i < recordy; i++) {
+        // max id klienta dla tabeli klienci
+        let result_max_id_klienta = await con.execute(`select max(id_klienta) from klienci`);
+        const max_id_klienta = result_max_id_klienta.rows[0];
+
+        // id wyników do wstawienia
+        const max_id_klienta_final = max_id_klienta[0] + 1;
+
+        const klienci = {
+          // klienci
+          id_klienta: max_id_klienta_final,
+          pesel: faker.random.numeric(11),  
+          nr_telefonu: faker.random.numeric(9),
+        }
+
+        const query_klienci = `insert into klienci (id_klienta, pesel, nr_telefonu) values (:id_klienta, :pesel, :nr_telefonu)`;
+       
+        // zapis do bazy
+        await con.execute(query_klienci, klienci);
+        console.log(`[${i+1}]Row inserted`);
+
+        // zapis do pliku
+        const queries = [
+          query_klienci.replace(/:[a-zA-Z0-9_]+/g, (match) => {
+            return `'${klienci[match.slice(1)]}'`;
+          })
+        ]
+        fs.appendFile(filename, queries + ';\n', (err) => {
+          if (err) throw err;
+          console.log('Data appended to file!');
+        });
+
+         // zerowanie pogranych wartosci
+        result_max_id_klienta = null;
+
+        // send data to frontend
+        res.write((i+1).toString());
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        con.commit();
+        res.end();
+        if (con) {
+          await con.close();
+        }
+      }
+});
 
 
 
