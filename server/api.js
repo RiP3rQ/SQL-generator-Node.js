@@ -13,6 +13,8 @@ const { insertProducent } = require("./controllers/producent");
 const { insertProdukt } = require("./controllers/produkt");
 const { insertRelation8 } = require("./controllers/relation8");
 const { insertPrzepisaneLekarstwa } = require("./controllers/przepisaneLekarstwa");
+const { insertTransakcja } = require("./controllers/transakcja");
+const { insertRecepta } = require("./controllers/recepta");
 
 const app = express();
 
@@ -188,7 +190,7 @@ app.post('/api/insertUsers', async function (req, res) {
           kwota: faker.random.numeric(3) + "." + faker.random.numeric(2),
           data_transakcji: formatedDate,
           apteka_id_apteki: faker.datatype.number({'min': 1,'max': max_id_apteki_final}),
-          transakcja_recepta_id_recepty: faker.datatype.number({'min': 1,'max': max_id_recepty}), // do zmiany,
+          transakcja_recepta_id_recepty: faker.datatype.number({'min': 1,'max': max_id_recepty}),
         }
         const recepta = {
           // recepta
@@ -317,6 +319,8 @@ app.post('/api/insertProducent', insertProducent);
 app.post('/api/insertProdukt', insertProdukt);
 app.post('/api/insertRelation8', insertRelation8);
 app.post('/api/insertPrzepisaneLekarstwa', insertPrzepisaneLekarstwa);
+app.post('/api/insertTransakcja', insertTransakcja);
+app.post('/api/insertRecepta', insertRecepta);
 
 
 
