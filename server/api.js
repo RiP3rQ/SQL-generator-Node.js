@@ -11,6 +11,8 @@ const { insertHurtownia } = require("./controllers/hurtownia");
 const { insertPracownicyApteki } = require("./controllers/pracownicyApteki");
 const { insertProducent } = require("./controllers/producent");
 const { insertProdukt } = require("./controllers/produkt");
+const { insertRelation8 } = require("./controllers/relation8");
+const { insertPrzepisaneLekarstwa } = require("./controllers/przepisaneLekarstwa");
 
 const app = express();
 
@@ -313,6 +315,8 @@ app.post('/api/insertHurtownia', insertHurtownia);
 app.post('/api/insertPracownicyApteki', insertPracownicyApteki);
 app.post('/api/insertProducent', insertProducent);
 app.post('/api/insertProdukt', insertProdukt);
+app.post('/api/insertRelation8', insertRelation8);
+app.post('/api/insertPrzepisaneLekarstwa', insertPrzepisaneLekarstwa);
 
 
 
