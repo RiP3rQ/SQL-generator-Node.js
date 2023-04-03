@@ -1,12 +1,31 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+
+function LinearProgressWithLabel(props) {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ width: "100%", mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
 
 function App() {
   const [records, setRecords] = useState(1);
   const [selectedOption, setSelectedOption] = useState("wszystkie");
   const [progress, setProgress] = useState(0);
 
+  // Generate records and send them to server
   const generateRecords = (records) => {
     if (selectedOption === "wszystkie") {
       axios.post("http://localhost:3001/api/insertUsers", { recordy: records });
@@ -58,10 +77,12 @@ function App() {
     setRecords(1);
   };
 
+  // Handle change of select option
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value); // Update selected option state on change
   };
 
+  // create a new WebSocket connection
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
 
@@ -75,8 +96,20 @@ function App() {
 
   console.log(progress);
 
+  // reset progress bar when records are done generating
+  useEffect(() => {
+    if (progress === 100) {
+      setTimeout(() => {
+        setProgress(0);
+      }, 1000);
+    }
+  }, [progress]);
+
   return (
     <div className="App">
+      <Box sx={{ width: "100%" }}>
+        <LinearProgressWithLabel value={progress} />
+      </Box>
       <div>
         <h1>SQL "Apteka" Generator</h1>
       </div>
