@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 insert into klienci (id_klienta, pesel, nr_telefonu) values ('285', '69022908353', '838878387');
 insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('165', 'Spring', '59-300', '0252 Benny Plains', 'Bogan - Runte', '27');
 insert into Hurtownia (id_hurtowni, wlasciciel, nazwa_hurtowni, nr_telefonu, adres) values ('165', 'Deborah Howell', 'Koelpin Inc', '696828206', 'Highlands Ranch 77710-1092 9306 Barton Hollow');
@@ -69,3 +70,24 @@ insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta
 insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('173', '148.64', '03-Apr-2023', '36', '53');
 insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('180', '10-Sep-2025', '147', '173');
 insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values ('173', '171')
+=======
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('159', '307.66', '03-Apr-2023', '27', '131');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('160', '880.62', '03-Apr-2023', '123', '10');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('161', '118.44', '03-Apr-2023', '73', '140');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('162', '640.74', '03-Apr-2023', '113', '98');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('163', '589.29', '03-Apr-2023', '98', '34');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('164', '482.73', '03-Apr-2023', '95', '138');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('165', '714.11', '03-Apr-2023', '146', '104');
+insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('166', '598.82', '03-Apr-2023', '127', '65');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('159', '11-Jun-2024', '208', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('160', '11-May-2026', '85', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('161', '4-Nov-2025', '168', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('162', '9-Nov-2025', '92', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('163', '11-Mar-2026', '261', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('164', '2-Sep-2026', '190', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('165', '9-Oct-2024', '75', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('166', '10-Jun-2027', '220', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('167', '9-Nov-2027', '256', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('168', '10-Nov-2025', '72', '167');
+insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('169', '7-Jun-2024', '222', '167');
+>>>>>>> bbc02466d6325abc878ec9302c2680badfdc9500
