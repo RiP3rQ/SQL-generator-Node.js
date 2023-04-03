@@ -1251,4 +1251,26 @@ insert into relation_8 (produkt_id_lekarstwa , hurtownia_id_hurtowni) values ('3
 insert into przepisane_lekarstwa ( id_lekarstwa, nazwa_lekarstwa, ilosc, recepta_id_recepty) VALUES ('294', 'siemens portals', '1', '157');
 insert into transakcja (id_transakcji, kwota, data_transakcji, apteka_id_apteki, recepta_id_recepty) values ('289', '331.77', '03-Apr-2023', '159', '185');
 insert into recepta (id_recepty, data_waznosci_recepty, klienci_id_klienta, transakcja_id_transakcji) values ('296', '10-Mar-2025', '87', '289');
-insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values ('289', '384')
+insert into relation_7 (transakcja_id_transakcji , produkt_id_lekarstwa) values ('289', '384')insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('288', 'Redwood City', '39-795', '25204 Eleanore Extension', 'Johnson - Batz', '99');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('289', 'Brandon', '77-623', '0355 Cormier Brook', 'King - Mayer', '43');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('290', 'Portsmouth', '70-263', '38497 Volkman Via', 'Nienow LLC', '36');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('291', 'Severn', '76-614', '9047 Coty Meadow', 'Reichert Group', '75');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('292', 'Murfreesboro', '82-503', '1001 Doyle Causeway', 'Cartwright and Sons', '15');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('293', 'Bethesda', '92-645', '904 Alexandrine Stream', 'Moore, Mayer and Shanahan', '54');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('294', 'Galveston', '47-974', '878 Roob Forges', 'Streich, Jones and Reichel', '94');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('295', 'St. Peters', '41-639', '4981 Trey Skyway', 'Rogahn LLC', '29');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('296', 'Kokomo', '29-350', '428 Romaguera Forest', 'Doyle, Auer and Hegmann', '52');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('297', 'Lehi', '58-365', '6337 Kaycee Hills', 'Durgan - Reinger', '90');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('298', 'Pittsburgh', '82-917', '362 Katrine Forest', 'Robel, Gislason and Skiles', '93');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('299', 'El Cajon', '81-807', '62501 Kutch Terrace', 'Armstrong and Sons', '76');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('300', 'Tuckahoe', '91-269', '1639 Abshire Crossroad', 'Shields - McLaughlin', '37');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('301', 'Oxnard', '12-944', '70918 Nasir Curve', 'Cronin Inc', '78');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('302', 'Santa Clara', '14-842', '11271 Sporer Port', 'Crist, Gottlieb and Gleason', '52');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('303', 'Des Plaines', '98-381', '426 Cruickshank Run', 'Lesch - Thiel', '35');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('304', 'Belleville', '19-568', '627 Wellington Tunnel', 'Rippin - Schuppe', '81');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('305', 'Camarillo', '65-710', '78837 Flatley Union', 'OConnell Inc', '11');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('306', 'Blue Springs', '63-808', '951 Stiedemann Mall', 'Hyatt, Kulas and Weissnat', '78');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('307', 'Riverton', '36-589', '97392 Block Hills', 'Altenwerth and Sons', '42');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('308', 'Madera', '25-663', '69175 Rosenbaum Shores', 'Borer - Murazik', '95');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('309', 'Vallejo', '25-395', '2267 Daija Ville', 'Runolfsdottir Group', '94');
+insert into apteka (id_apteki, miasto, kod_pocztowy, ulica, nazwa, ilosc_pracownikow) values ('310', 'East Orange', '56-893', '2319 Orville Bridge', 'Harris - Jerde', '23');

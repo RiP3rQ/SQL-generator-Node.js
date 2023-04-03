@@ -6,6 +6,7 @@ const fs = require("fs");
 const { faker } = require("@faker-js/faker");
 const moment = require("moment");
 const WebSocket = require("ws");
+const wss = require("./websocket");
 
 const { insertKlienci } = require("./controllers/klienci");
 const { insertApteka } = require("./controllers/apteka");
@@ -26,8 +27,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on("connection", function connection(ws) {
   console.log("WebSocket connected");
