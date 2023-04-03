@@ -109,7 +109,11 @@ app.post("/api/insertUsers", async function (req, res) {
       let result_max_data_transakcji = await con.execute(
         "select max(data_transakcji) from transakcja"
       );
-      const max_data = result_max_data_transakcji.rows[0];
+      let max_data = result_max_data_transakcji.rows[0];
+
+      if (max_data[0] === null) {
+        max_data[0] = new Date(2010, 0, 1, 23, 59, 59);
+      }
 
       // dokładna max data z bazy
       const max_rok = max_data[0].getFullYear();
@@ -153,9 +157,7 @@ app.post("/api/insertUsers", async function (req, res) {
       const max_id_recepty_final = max_id_recepty[0] + 1;
       const max_id_transakcji_final = max_id_transakcji[0] + 1;
 
-      // logowanie wartości
-      // console.log(max_id_pracownika_final );
-
+      // obiekty do podmiany w tabelach
       const klienci = {
         // klienci
         id_klienta: max_id_klienta_final,
@@ -202,10 +204,13 @@ app.post("/api/insertUsers", async function (req, res) {
           faker.random.numeric(4) + "." + faker.random.numeric(2),
         adres_zamieszkania_pracownika:
           faker.address.cityName() + " " + faker.address.streetAddress(),
-        id_apteki_zatrudniajacej: faker.datatype.number({
-          min: 1,
-          max: max_id_hurtowni_final,
-        }),
+        id_apteki_zatrudniajacej:
+          max_id_apteki_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_apteki_final,
+              }),
       };
       const producent = {
         // producent
@@ -228,10 +233,13 @@ app.post("/api/insertUsers", async function (req, res) {
           faker.datatype.number({ min: 1, max: 99 }) +
           "." +
           faker.datatype.number({ min: 10, max: 99 }),
-        producent_id_producenta: faker.datatype.number({
-          min: 1,
-          max: max_id_producenta_final,
-        }),
+        producent_id_producenta:
+          max_id_producenta_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_producenta_final,
+              }),
         ilosc_na_magazynie: faker.datatype.number({ min: 1, max: 99 }),
         skladniki:
           faker.random.words(1) +
@@ -248,24 +256,33 @@ app.post("/api/insertUsers", async function (req, res) {
       };
       const relation_8 = {
         // relation 8
-        id_lekarstwa: faker.datatype.number({
-          min: 1,
-          max: max_id_produktu_final,
-        }),
-        relation_8_hurtownia_id_hurtowni: faker.datatype.number({
-          min: 1,
-          max: max_id_hurtowni_final,
-        }),
+        id_lekarstwa:
+          max_id_produktu_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_produktu_final,
+              }),
+        relation_8_hurtownia_id_hurtowni:
+          max_id_hurtowni_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_hurtowni_final,
+              }),
       };
       const przepisane_lekarstwa = {
         // przepisane lekarstwa
         przepisane_lekarstwa_id_lekarstwa: max_id_przepisanego_lekarstwa_final,
         przepisane_lekarstwa_nazwa_lekarstwa: faker.random.words(2),
         przepisane_lekarstwa_ilosc: faker.datatype.number({ min: 1, max: 9 }),
-        recepta_id_recepty: faker.datatype.number({
-          min: 1,
-          max: max_id_recepty,
-        }),
+        recepta_id_recepty:
+          max_id_recepty_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_recepty,
+              }),
       };
 
       const transakcja = {
@@ -273,14 +290,20 @@ app.post("/api/insertUsers", async function (req, res) {
         id_transakcji: max_id_transakcji_final,
         kwota: faker.random.numeric(3) + "." + faker.random.numeric(2),
         data_transakcji: formatedDate,
-        apteka_id_apteki: faker.datatype.number({
-          min: 1,
-          max: max_id_apteki_final,
-        }),
-        transakcja_recepta_id_recepty: faker.datatype.number({
-          min: 1,
-          max: max_id_recepty,
-        }),
+        apteka_id_apteki:
+          max_id_apteki_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_apteki_final,
+              }),
+        transakcja_recepta_id_recepty:
+          max_id_recepty_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_recepty,
+              }),
       };
       const recepta = {
         // recepta
@@ -291,20 +314,26 @@ app.post("/api/insertUsers", async function (req, res) {
           faker.date.month({ abbr: true }) +
           "-" +
           faker.datatype.number({ min: 2024, max: 2027 }),
-        klienci_id_klienta: faker.datatype.number({
-          min: 1,
-          max: max_id_klienta_final,
-        }),
+        klienci_id_klienta:
+          max_id_klienta_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_klienta_final,
+              }),
         transakcja_id_transakcji: max_id_transakcji_final,
       };
 
       const relation_7 = {
         // relation 7
         transakcja_id_transakcji: max_id_transakcji_final,
-        id_lekarstwa: faker.datatype.number({
-          min: 1,
-          max: max_id_produktu_final,
-        }),
+        id_lekarstwa:
+          max_id_produktu_final === 1
+            ? 1
+            : faker.datatype.number({
+                min: 1,
+                max: max_id_produktu_final,
+              }),
       };
 
       const query_klienci = `insert into klienci (id_klienta, pesel, nr_telefonu) values (:id_klienta, :pesel, :nr_telefonu)`;
@@ -410,12 +439,6 @@ app.post("/api/insertUsers", async function (req, res) {
     }
   }
 });
-
-// pojedyńcze inserty jako osbne routy w expressie
-
-// zabezpieczenia jeżeli nie ma danych w bazie
-
-// wysyłanie danych do frontendu
 
 // insertowanie do pojedyńczych tabel
 app.post("/api/insertKlienci", insertKlienci);

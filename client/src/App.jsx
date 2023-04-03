@@ -4,6 +4,7 @@ import "./App.css";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import toast, { Toaster } from "react-hot-toast";
 
 function LinearProgressWithLabel(props) {
   return (
@@ -99,6 +100,7 @@ function App() {
   // reset progress bar when records are done generating
   useEffect(() => {
     if (progress === 100) {
+      toast.success("Generowanie zakończone sukcesem!");
       setTimeout(() => {
         setProgress(0);
       }, 1000);
@@ -107,6 +109,7 @@ function App() {
 
   return (
     <div className="App">
+      <Toaster position="top-center" />
       <Box sx={{ width: "100%" }}>
         <LinearProgressWithLabel value={progress} />
       </Box>
