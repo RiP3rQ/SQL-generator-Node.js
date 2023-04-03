@@ -1,6 +1,8 @@
 const oracleDb = require("oracledb");
 const fs = require("fs");
 const { faker } = require("@faker-js/faker");
+const WebSocket = require("ws");
+const wss = require("../websocket");
 
 const insertRelation7 = async (req, res) => {
   let con;
@@ -63,8 +65,20 @@ const insertRelation7 = async (req, res) => {
       result_max_id_transakcji = null;
       result_max_id_produktu = null;
 
-      // send data to frontend
-      res.write((i + 1).toString());
+      // Send progress data to the WebSocket server
+      const progress = Math.round(((i + 1) / recordy) * 100);
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(
+            JSON.stringify({
+              type: "progress",
+              data: {
+                progress,
+              },
+            })
+          );
+        }
+      });
     }
   } catch (err) {
     console.log(err);
