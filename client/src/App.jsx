@@ -22,7 +22,28 @@ function App() {
     } else if(selectedOption === "pracownicy_apteki") {
       axios.post("http://localhost:3001/api/insertPracownicyApteki",
       { recordy: records})
-    }
+    } else if(selectedOption === "producent") {
+      axios.post("http://localhost:3001/api/insertProducent",
+      { recordy: records})
+    } else if(selectedOption === "produkt") {
+      axios.post("http://localhost:3001/api/insertProdukt",
+      { recordy: records})
+    } else if(selectedOption === "relation_8") {
+      axios.post("http://localhost:3001/api/insertRelation8",
+      { recordy: records})
+    } else if(selectedOption === "przepisane_lekarstwa") {
+      axios.post("http://localhost:3001/api/insertPrzepisaneLekarstwa",
+      { recordy: records})
+    } else if(selectedOption === "transakcja") {
+      axios.post("http://localhost:3001/api/insertTransakcja",
+      { recordy: records})
+    } else if(selectedOption === "recepta") {
+      axios.post("http://localhost:3001/api/insertRecepta",
+      { recordy: records})
+    } else if(selectedOption === "relation_7") {
+      axios.post("http://localhost:3001/api/insertRelation7",
+      { recordy: records})
+    } 
     setRecords(1);
   };
 
