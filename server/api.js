@@ -256,20 +256,8 @@ app.post("/api/insertUsers", async function (req, res) {
       };
       const relation_8 = {
         // relation 8
-        id_lekarstwa:
-          max_id_produktu_final === 1
-            ? 1
-            : faker.datatype.number({
-                min: 1,
-                max: max_id_produktu_final,
-              }),
-        relation_8_hurtownia_id_hurtowni:
-          max_id_hurtowni_final === 1
-            ? 1
-            : faker.datatype.number({
-                min: 1,
-                max: max_id_hurtowni_final,
-              }),
+        id_lekarstwa: max_id_produktu_final,
+        relation_8_hurtownia_id_hurtowni: max_id_hurtowni_final,
       };
       const przepisane_lekarstwa = {
         // przepisane lekarstwa
@@ -327,13 +315,7 @@ app.post("/api/insertUsers", async function (req, res) {
       const relation_7 = {
         // relation 7
         transakcja_id_transakcji: max_id_transakcji_final,
-        id_lekarstwa:
-          max_id_produktu_final === 1
-            ? 1
-            : faker.datatype.number({
-                min: 1,
-                max: max_id_produktu_final,
-              }),
+        id_lekarstwa: max_id_produktu_final,
       };
 
       const query_klienci = `insert into klienci (id_klienta, pesel, nr_telefonu) values (:id_klienta, :pesel, :nr_telefonu)`;
