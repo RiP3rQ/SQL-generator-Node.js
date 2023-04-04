@@ -22,6 +22,7 @@ const insertProdukt = async (req, res) => {
         "select max(id_lekarstwa) from produkt"
       );
       const max_id_produktu = result_max_id_produktu.rows[0];
+
       let result_max_id_producenta = await con.execute(
         "select max(id_producenta) from producent"
       );
@@ -40,7 +41,7 @@ const insertProdukt = async (req, res) => {
           faker.datatype.number({ min: 10, max: 99 }),
         producent_id_producenta: faker.datatype.number({
           min: 1,
-          max: max_id_producenta_final,
+          max: max_id_producenta,
         }),
         ilosc_na_magazynie: faker.datatype.number({ min: 1, max: 99 }),
         skladniki:
